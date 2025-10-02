@@ -43,8 +43,8 @@ export class ProfileController {
 
   @HasRoles('admin')
   @Get()
-  async index(@Query() query: ProfileQueryDto) {
-    const result = await this.profileService.getProfiles(query);
+  async findAll(@Query() query: ProfileQueryDto) {
+    const result = await this.profileService.findAll(query);
 
     return ApiResponse.successWithPaginate(
       'Data client berhasil diambil',
@@ -54,7 +54,7 @@ export class ProfileController {
   }
 
   @Get(':id')
-  async show(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const result = await this.profileService.findOne(id);
     return ApiResponse.successWithData('Data client berhasil diambil', result);
   }
@@ -99,8 +99,8 @@ export class ProfileController {
 
   @HasRoles('admin')
   @Delete(':id')
-  async destroy(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.profileService.destroy(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const result = await this.profileService.remove(id);
     return ApiResponse.success('Data client berhasil dihapus');
   }
 }

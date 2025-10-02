@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsIn,
-  IsNotEmpty,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateProfileDto {

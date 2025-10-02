@@ -11,7 +11,7 @@ import { join } from 'path';
 export class ProfileService {
   constructor(private prismaService: PrismaService) {}
 
-  async getProfiles(query: ProfileQueryDto) {
+  async findAll(query: ProfileQueryDto) {
     const { page, limit, status, search } = query; // Destructure semua properti
     const skip = (page - 1) * limit;
 
@@ -40,6 +40,7 @@ export class ProfileService {
           user: {
             select: {
               email: true,
+              createdAt: true,
             },
           },
         },
@@ -129,7 +130,7 @@ export class ProfileService {
     });
   }
 
-  async destroy(id: number) {
+  async remove(id: number) {
     const result = await this.prismaService.profile.delete({ where: { id } });
     return result;
   }

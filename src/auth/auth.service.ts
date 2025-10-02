@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { User, VerificationCode } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { EmailService } from '@/email/email.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -100,7 +101,6 @@ export class AuthService {
   async register(registerDto: any) {
     const { email, password, name, username } = registerDto;
 
-    // [LANGKAH PENTING] Cek dulu apakah email atau username sudah ada.
     const existingUser = await this.prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { username: username }],
@@ -135,11 +135,19 @@ export class AuthService {
         },
       });
 
+      const findRole = await this.prisma.role.findUnique({
+        where: { name: 'client' },
+      });
+
+      if (!findRole) {
+        throw new NotFoundException('Role client tidak ditemukan.');
+      }
+
       // Tambahkan role client ke user
       await this.prisma.userRole.create({
         data: {
           userId: user.id,
-          roleId: 2,
+          roleId: findRole.id,
         },
       });
 
@@ -316,6 +324,37 @@ export class AuthService {
       where: {
         token: token,
       },
+    });
+  }
+
+  async changePassword(
+    id: number,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    if (!user || !user.password) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      changePasswordDto.currentPassword,
+      user.password,
+    );
+    if (!isPasswordValid) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    const hashedNewPassword = await bcrypt.hash(
+      changePasswordDto.newPassword,
+      10,
+    );
+
+    await this.prisma.user.update({
+      where: { id: id },
+      data: { password: hashedNewPassword },
     });
   }
 }

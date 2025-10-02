@@ -11,6 +11,9 @@ import { EmailModule } from './email/email.module';
 import { ProfileModule } from './profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static'; // <-- 1. Impor ServeStaticModule
 import { join } from 'path';
+import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
   imports: [
@@ -43,6 +46,9 @@ import { join } from 'path';
     PrismaModule,
     EmailModule,
     ProfileModule,
+    UsersModule,
+    RolesModule,
+    PermissionsModule,
   ],
   controllers: [],
   providers: [

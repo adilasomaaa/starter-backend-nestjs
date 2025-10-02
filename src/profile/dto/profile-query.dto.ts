@@ -2,14 +2,7 @@ import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import {
-  IsEnum,
-  IsIn,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export class ProfileQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional({

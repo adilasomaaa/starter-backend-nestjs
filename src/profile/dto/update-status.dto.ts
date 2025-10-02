@@ -1,6 +1,5 @@
-import { IsEmail, IsEnum, IsIn, IsNotEmpty, Length } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { Status } from '@prisma/client';
 
 export class UpdateStatusDto {
